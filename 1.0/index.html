@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="p5.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+    <script src="tokenizer.js"></script>
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div class="lado-esquerdo">
+    <main>
+      <div id="segurando"></div>
+      <button onclick="startALL()">SIMULAR</button>
+      <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
+      <button onclick="bando.resetarPos()">RESETAR</button>
+    </main>
+    </div>
+    
+    <div class="lado-direito">
+      <div class="container-acoes">
+        <button type="button" onclick="saveJSON(bando.tropa,'peculio.json')">SALVAR PECÚLIO</button>
+        Carregar peculio:<input type="file" id="seletor" accept=".json">
+        <script>
+          const seletor = document.getElementById('seletor');
+        
+          seletor.addEventListener('change', function(event) {
+            const arquivo = event.target.files[0];
+            const leitor = new FileReader();
+        
+            leitor.onload = function(e) {
+              bando.tropa = JSON.parse(e.target.result);
+              bando.resetarPos();
+            };
+        
+            leitor.readAsText(arquivo);
+          });
+      </script>
+      </div>
+      <textarea id="roteiro" placeholder="Escreva seu roteiro de formatura aqui..."></textarea>
+    </div>
+
+  </body>
+</html>
