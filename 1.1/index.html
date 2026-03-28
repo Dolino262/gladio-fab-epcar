@@ -10,11 +10,7 @@
   <body>
     <div class="lado-esquerdo">
     <main>
-      <div>
-        <span id="qtdv"></span>
-        <span>|</span>
-        <span id="segurando"></span>
-      </div>
+      <div id="segurando"></div>
       <button onclick="startALL()">SIMULAR</button>
       <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
       <button onclick="bando.resetarPos()">RESETAR</button>
@@ -30,7 +26,7 @@
     
     <div class="lado-direito">
       <div class="container-acoes">
-        <button type="button" onclick="saveJSON({trp: bando.tropa, qtd: bando.showing},'peculio.json');">SALVAR PECÚLIO</button>
+        <button type="button" onclick="saveJSON(bando.tropa,'peculio.json');">SALVAR PECÚLIO</button>
         Carregar peculio:<input type="file" id="seletor" accept=".json">
         <script>
           const seletor = document.getElementById('seletor');
@@ -38,9 +34,7 @@
             const arquivo = event.target.files[0];
             const leitor = new FileReader();
             leitor.onload = function(e) {
-              let ans = JSON.parse(e.target.result);
-              bando.tropa=ans.trp;
-              bando.showing=ans.qtd;
+              bando.tropa = JSON.parse(e.target.result);
               bando.resetarPos();
             };
             leitor.readAsText(arquivo);

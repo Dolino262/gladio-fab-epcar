@@ -48,7 +48,7 @@ class Steps {
 }
 function whichOpIs(text) {
     switch(text) {
-        case 'frent':
+        case 'frente':
             return ik.frente
             break;
         case 'rotacionar':

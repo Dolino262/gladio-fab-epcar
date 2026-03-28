@@ -10,9 +10,9 @@ class Militar {
         this.inix=x;
         this.iniy=y;
         this.structPoints= [
-            [-0.20,0.001],
-            [0.001,-0.20],
-            [0.20,0.001]
+            [-0.3,0.001],
+            [0.001,-0.3],
+            [0.3,0.001]
         ]
         this.angle=270;
         this.exist=true;
@@ -23,7 +23,6 @@ class Bando {
     constructor() {
         this.tropa = []
         this.currentTime;
-        this.showing=0;
     }  
     frameTempo() {
         for (let b=0;b<this.currentTime.insts.length;b++) {
@@ -104,8 +103,6 @@ class Bando {
             let ry=(cy-look.y)*BOX_HEIGHT + HEIGHT/2;
             if (look.selected) {
                 fill(0, 100, 32);
-            } else {
-                fill(80,255,80,200)
             }
             circle(rx,ry,BOX_WIDTH/1.5);
             stroke(0);
@@ -113,11 +110,9 @@ class Bando {
             textSize(sizeText);
             fill('black')
             // consertar alinhamento...
-            text(i.toString(),rx-sizeText/2.5,ry+sizeText/1.3)
+            text(i.toString(),rx-sizeText/2.6,ry+sizeText/3)
             fill(255)   
             let last=undefined;
-            stroke(155,0,240,200);
-            strokeWeight(3);
             for (let b=0;b<this.tropa[i].structPoints.length;b++) {
                 let pt=this.tropa[i].structPoints[b];
                 let angle=this.tropa[i].angle*Math.PI/180
@@ -134,11 +129,8 @@ class Bando {
                 }
                 last=[nx,ny];
             }
-            strokeWeight(1);
-            stroke(0)
         }
         document.getElementById("segurando").innerHTML=content_seg.substring(0,content_seg.length-2)
-        document.getElementById("qtdv").innerHTML="total: " + this.showing;
     }
     resetarPos() {
         for (let i=0;i<this.tropa.length;i++) {
@@ -172,49 +164,33 @@ function drawGrid(cx, cy) {
     let mid=WIDTH/2;
     let dx=(Math.floor(cx)-cx)*BOX_WIDTH
     let dy=(cy-Math.floor(cy))*BOX_HEIGHT
-    stroke(128,128,128,100);
     for (let i=0;i<boxxq/2+1;i++) {  
         line(mid+BOX_WIDTH*i+dx,0,mid+BOX_WIDTH*i+dx,HEIGHT)
         line(mid-BOX_WIDTH*(i+1)+dx,0,mid-BOX_WIDTH*(i+1)+dx,HEIGHT)
     }
-    stroke(128,128,128, 50);
-    for (let i=0;i<boxxq+1;i++) {   
-        line(mid+BOX_WIDTH*i/2+dx,0,mid+BOX_WIDTH*i/2+dx,HEIGHT)
-        line(mid-BOX_WIDTH*(i+1)/2+dx,0,mid-BOX_WIDTH*(i+1)/2+dx,HEIGHT)
-    }
-    stroke(0); 
-    
     mid=HEIGHT/2;
-    stroke(128,128,128,100);
     for (let i=0;i<boxyq/2+1;i++) {
         line(0,mid+BOX_HEIGHT*i+dy,WIDTH,mid+BOX_HEIGHT*i+dy)
         line(0,mid-BOX_HEIGHT*(i+1)+dy,WIDTH,mid-BOX_HEIGHT*(i+1)+dy)
     }
-    stroke(128,128,128, 50);
-    for (let i=0;i<boxyq+1;i++) {  
-        line(0,mid+BOX_HEIGHT*i/2+dy,WIDTH,mid+BOX_HEIGHT*i/2+dy)
-        line(0,mid-BOX_HEIGHT*(i+1)/2+dy,WIDTH,mid-BOX_HEIGHT*(i+1)/2+dy)
-    }
-    stroke(0)
 }
 
-function nearRad(num,rad) {
-    num/=rad;
-    if (num<0) return -Math.round(-num)*rad;
-    return Math.round(num)*rad; 
+function nearRad(num) {
+    if (num<0) return -Math.round(-num);
+    return Math.round(num); 
 }
 let msx=0;
 let msy=0;
 function drawMousePos(cx, cy) {
-    let px=nearRad((mouseX-WIDTH/2)/BOX_WIDTH+cx,0.5);
-    let py=nearRad(cy+(HEIGHT/2-mouseY)/BOX_HEIGHT,0.5);
+    let px=nearRad((mouseX-WIDTH/2)/BOX_WIDTH+cx);
+    let py=nearRad(cy+(HEIGHT/2-mouseY)/BOX_HEIGHT);
     let rx=(px-cx)*BOX_WIDTH + WIDTH/2;
     let ry=(cy-py)*BOX_HEIGHT + HEIGHT/2;
     msx=px;
     msy=py;
     noFill()
     stroke(255,0,0)
-    circle(rx,ry,BOX_WIDTH/1.3);
+    circle(rx,ry,BOX_WIDTH);
     fill(255);
     stroke(0);
 }
@@ -258,7 +234,7 @@ function setup() {
 let cx=0,cy=0;
 let lx=0,ly=0;
 function draw() {
-    background(0);
+    background(220);
     drawGrid(lx,ly);
     drawMousePos(lx,ly)
     bando.drawTropa(lx,ly);
@@ -286,7 +262,6 @@ function mousePressed() {
                     look.selected=!look.selected;
                 } else {
                     look.exist=false;
-                    bando.showing--;
                 }
                 gone=true;
                 break; 
@@ -298,13 +273,12 @@ function mousePressed() {
                 let look=bando.tropa[i];
                 if (!look.exist) {
                     bando.tropa[i] = new Militar(msx,msy)
-                    bando.showing++;
                     gone=true
                     break;
                 }
             }
         }
-        if (!gone) {bando.tropa.push(new Militar(msx,msy)); bando.showing++;};
+        if (!gone) bando.tropa.push(new Militar(msx,msy));
         return;
     }
     if (!pd) {
