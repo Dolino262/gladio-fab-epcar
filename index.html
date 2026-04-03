@@ -17,13 +17,17 @@
       </div>
       <button onclick="startALL()">SIMULAR</button>
       <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
-      <button onclick="bando.resetarPos()">RESETAR</button>
+      <button onclick="bando.resetarPos();IsRunning=false;">RESETAR</button>
     </main>
     <div id="menu_macro">
       SELECIONE OS MILITARES: 
       <button type="button" onclick="
         salvarSelecao();
       ">SALVAR SELEÇÃO</button>
+      <button type="button" onclick="
+        document.getElementById('menu_macro').hidden=true;
+        selectMode=false;
+      ">CANCELAR SELEÇÃO</button>
     </div>
     <script>document.getElementById("menu_macro").hidden=true</script>
     </div>
@@ -67,22 +71,25 @@
         })
       </script>
       </div>
+      <span id="vendo">Vendo: roteiro</span>
       <textarea id="roteiro" placeholder="Escreva seu roteiro de formatura aqui..."></textarea>
       <div class="container-acoes">
         <button id="hvw" onclick="
+          document.getElementById('vendo').innerHTML='Vendo: header'
           saveRot=document.getElementById('roteiro').value
           document.getElementById('roteiro').value=saveHeader
           document.getElementById('hvw').hidden=true;
           document.getElementById('rtw').hidden=false;
           look=true;
-          ">HEADER VIEW</button>
+          ">VER HEADER</button>
         <button id="rtw" onclick="
+          document.getElementById('vendo').innerHTML='Vendo: roteiro'
           saveHeader=document.getElementById('roteiro').value
           document.getElementById('roteiro').value=saveRot
           document.getElementById('hvw').hidden=false;
           document.getElementById('rtw').hidden=true;
           look=false;
-        ">ROTEIRO VIEW</button>
+        ">VER ROTEIRO</button>
         <script>
           document.getElementById('hvw').hidden=false;
           document.getElementById('rtw').hidden=true;

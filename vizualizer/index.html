@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="p5.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+    <script src="tokenizer.js"></script>
+    <script src="main.js"></script>
+    <script>
+      let xhr = new XMLHttpRequest();
+      xhr.open("GET", "pec.json", true)
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let texto = xhr.responseText; // Aqui está sua string pura
+            let ans=JSON.parse(texto);
+            bando.tropa=ans.trp;
+            bando.showing=ans.qtd;
+          }
+      };
+      xhr.send()
+      let xhr2= new XMLHttpRequest();
+      xhr2.open("GET", "rot.json", true)
+      xhr2.onreadystatechange = function () {
+        if (xhr2.readyState === 4 && xhr2.status === 200) {
+            let texto = xhr2.responseText; // Aqui está sua string pura
+            let cont=JSON.parse(texto);
+            saveRot=cont.roteiro;
+            saveHeader=cont.header;
+          }
+      };
+      xhr2.send()
+    </script>
+  </head>
+  <body>
+    <div class="lado-esquerdo">
+    <main>
+
+    </main>
+    <button onclick="startALL()">SIMULAR</button>
+      <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
+      <button onclick="bando.resetarPos();IsRunning=false;">RESETAR</button>
+    </div>
+  </body>
+</html>

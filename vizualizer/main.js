@@ -1,5 +1,5 @@
-let HEIGHT=500;
-let WIDTH=800;
+let HEIGHT=0.99*window.innerHeight;
+let WIDTH=window.innerWidth;
 let BOX_HEIGHT=50;
 let BOX_WIDTH=50;
 
@@ -144,8 +144,8 @@ class Bando {
             strokeWeight(1);
             stroke(0)
         }
-        document.getElementById("segurando").innerHTML=content_seg.substring(0,content_seg.length-2)
-        document.getElementById("qtdv").innerHTML="total: " + this.showing;
+        //document.getElementById("segurando").innerHTML=content_seg.substring(0,content_seg.length-2)
+        //document.getElementById("qtdv").innerHTML="total: " + this.showing;
     }
     resetarPos() {
         for (let i=0;i<this.tropa.length;i++) {
@@ -168,9 +168,9 @@ function salvarSelecao() {
     head+="'";
     saveHeader+='\n'+head;
     if (look) {
-        document.getElementById("roteiro").value+='\n'+head;
+        //document.getElementById("roteiro").value+='\n'+head;
     }
-    document.getElementById("menu_macro").hidden=true;
+    //document.getElementById("menu_macro").hidden=true;
     selectMode=false;
 }
 function drawGrid(cx, cy) {
@@ -235,8 +235,8 @@ let saveRot=""
 let saveHeader=""
 let look=false;
 function rotRef() { 
-    if (!look) saveRot=document.getElementById('roteiro').value
-    else saveHeader=document.getElementById('roteiro').value
+    //if (!look) saveRot=document.getElementById('roteiro').value
+    //else saveHeader=document.getElementById('roteiro').value
 }
 function startALL() {
     rotRef()

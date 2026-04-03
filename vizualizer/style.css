@@ -1,0 +1,44 @@
+body {
+    display: flex;
+    /* Cria o espaço máximo entre os itens (um na esquerda, outro na direita) */
+    justify-content: space-between; 
+    align-items: flex-start; /* Alinha os itens no topo */
+    padding: 0;
+    margin: 0;
+}
+
+.lado-esquerdo {
+    padding: 0;
+    border-radius: 0;
+}
+
+.lado-direito {
+    display: flex;
+    flex-direction: column;
+    /* Alinha os itens internos (textarea, botões) à esquerda deste bloco */
+    align-items: flex-start; 
+    gap: 10px;
+    padding-right: 1%;
+    padding-top:2%;
+    width: 500px; /* Define uma largura para o bloco da direita */
+}
+
+.container-acoes {
+    display: flex;       /* Alinha em linha */
+    align-items: center; /* Alinha as alturas (centro) */
+    font-size: 10px;
+    gap: 10px;     
+}
+
+textarea {
+    width: 500px;
+    height: 300px;
+}
+
+main{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Camada inferior */
+    background: #eee;
+  }
