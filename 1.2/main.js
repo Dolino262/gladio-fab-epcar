@@ -24,33 +24,16 @@ class Bando {
         this.tropa = []
         this.currentTime;
         this.showing=0;
-
-        this.stepperMode=true;
-        this.stepCount=0;
-        this.stepperBound=15;
-        this.timeSave=0;
-        this.stepperTrigger=false;
     }  
-    triggerStep() {
-        if (!this.stepperTrigger) this.stepCount++;
-        this.stepperTrigger=true;
-        this.timeSave=frameCount;
-    }
     frameTempo() {
-        if (this.stepperTrigger) {
-            if (frameCount-this.timeSave<this.stepperBound) return;
-            this.stepperTrigger=false;
-        }
         for (let b=0;b<this.currentTime.insts.length;b++) {
             let intels=this.currentTime.insts[b];
             let opc=intels.kind;
             let ids=intels.who;
             switch(opc) {
                 case ik.frente:
-                    if (intels.par[0]<0) continue 
-                    let wasf=false;
+                    if (intels.par[0]<0) continue  
                     if (intels.first) {
-                        wasf=true;
                         intels.first=false;
                         intels.sv=[];
                         for (let i=0;i<ids.length;i++) {
@@ -66,13 +49,7 @@ class Bando {
                         this.tropa[ids[i]].x+=dx;
                         this.tropa[ids[i]].y+=dy;
                     }
-                    let bef=intels.par[0]
                     intels.par[0]-=vel;
-                    if (this.stepperMode && !wasf) {
-                        if (Math.floor(bef) != Math.floor(intels.par[0])) {
-                            this.triggerStep();
-                        }
-                    }
                     if (intels.par[0]<0) {
                         intels.ended=true;
                         //if (intels.par.length==3) {
@@ -167,16 +144,10 @@ class Bando {
             strokeWeight(1);
             stroke(0)
         }
-        if (this.stepperMode) {
-            textSize(0.08*HEIGHT);
-            fill('white')
-            text(this.stepCount,0.04*WIDTH,0.11*HEIGHT)
-        }
         document.getElementById("segurando").innerHTML=content_seg.substring(0,content_seg.length-2)
         document.getElementById("qtdv").innerHTML="total: " + this.showing;
     }
     resetarPos() {
-        this.stepCount=0;
         for (let i=0;i<this.tropa.length;i++) {
             let look=this.tropa[i];
             look.x=look.inix;
@@ -272,7 +243,6 @@ function startALL() {
     let text=saveHeader+saveRot
     cron=compileText(text)
     console.log(cron)
-    bando.stepCount=0;
     startSim();
     
 }

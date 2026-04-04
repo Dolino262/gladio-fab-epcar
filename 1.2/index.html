@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="p5.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+    <script src="tokenizer.js"></script>
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div class="lado-esquerdo">
+    <main>
+      <div>
+        <span id="qtdv"></span>
+        <span>|</span>
+        <span id="segurando"></span>
+      </div>
+      <button onclick="startALL()">SIMULAR</button>
+      <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
+      <button onclick="bando.resetarPos();IsRunning=false;">RESETAR</button>
+    </main>
+    <div id="menu_macro">
+      SELECIONE OS MILITARES: 
+      <button type="button" onclick="
+        salvarSelecao();
+      ">SALVAR SELEÇÃO</button>
+      <button type="button" onclick="
+        document.getElementById('menu_macro').hidden=true;
+        selectMode=false;
+      ">CANCELAR SELEÇÃO</button>
+    </div>
+    <script>document.getElementById("menu_macro").hidden=true</script>
+    </div>
+    
+    <div class="lado-direito">
+      <div class="container-acoes">
+        <button type="button" onclick="saveJSON({trp: bando.tropa, qtd: bando.showing},'peculio.json');">SALVAR PECÚLIO</button>
+        Carregar peculio:<input type="file" id="seletor" accept=".json">
+        <script>
+          const seletor = document.getElementById('seletor');
+          seletor.addEventListener('change', function(event) {
+            const arquivo = event.target.files[0];
+            const leitor = new FileReader();
+            leitor.onload = function(e) {
+              let ans = JSON.parse(e.target.result);
+              bando.tropa=ans.trp;
+              bando.showing=ans.qtd;
+              bando.resetarPos();
+            };
+            leitor.readAsText(arquivo);
+          });
+      </script>
+      </div>
+      <div class="container-acoes">
+        <button type="button" onclick="rotRef();conteudo = {header: saveHeader, roteiro: saveRot};saveJSON(conteudo,'roteiro.json')">SALVAR ROTEIRO</button>
+        Carregar Roteiro:<input type="file" id="seletor2" accept=".json">
+        <script>
+          const seletor2=document.getElementById("seletor2")
+          seletor2.addEventListener('change', (event)=> {
+            let arquivo=event.target.files[0];
+            const leitor=new FileReader();
+            leitor.onload = (e) => {
+              let cont=JSON.parse(e.target.result);
+              saveRot=cont.roteiro;
+              saveHeader=cont.header;
+              if (!look)document.getElementById('roteiro').value=cont.roteiro;
+              else document.getElementById('roteiro').value=cont.header;
+              bando.resetarPos();
+            }
+            leitor.readAsText(arquivo);
+        })
+      </script>
+      </div>
+      <span id="vendo">Vendo: roteiro</span>
+      <textarea id="roteiro" placeholder="Escreva seu roteiro de formatura aqui..."></textarea>
+      <div class="container-acoes">
+        <button id="hvw" onclick="
+          document.getElementById('vendo').innerHTML='Vendo: header'
+          saveRot=document.getElementById('roteiro').value
+          document.getElementById('roteiro').value=saveHeader
+          document.getElementById('hvw').hidden=true;
+          document.getElementById('rtw').hidden=false;
+          look=true;
+          ">VER HEADER</button>
+        <button id="rtw" onclick="
+          document.getElementById('vendo').innerHTML='Vendo: roteiro'
+          saveHeader=document.getElementById('roteiro').value
+          document.getElementById('roteiro').value=saveRot
+          document.getElementById('hvw').hidden=false;
+          document.getElementById('rtw').hidden=true;
+          look=false;
+        ">VER ROTEIRO</button>
+        <script>
+          document.getElementById('hvw').hidden=false;
+          document.getElementById('rtw').hidden=true;
+        </script>
+      </div>
+      <div class="container-acoes">
+        <button onclick="
+          document.getElementById('menu_macro').hidden=false;
+          selectMode=true;
+          ">ADICIONAR SELEÇÃO</button>
+      </div>
+    </div>
+
+  </body>
+</html>
