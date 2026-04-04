@@ -67,7 +67,7 @@ class Bando {
                     intels.par[0]-=vel;
                     if (this.stepperMode) {
                         if (Math.floor(bef) != Math.floor(intels.par[0])) {
-                            triggerStep();
+                            this.triggerStep();
                         }
                     }
                     if (intels.par[0]<0) {
