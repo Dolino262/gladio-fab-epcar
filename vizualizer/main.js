@@ -24,8 +24,22 @@ class Bando {
         this.tropa = []
         this.currentTime;
         this.showing=0;
+        this.stepperMode=true;
+        this.stepCount=0;
+        this.stepperBound=15;
+        this.timeSave=0;
+        this.stepperTrigger=false;
     }  
+    triggerStep() {
+        if (!this.stepperTrigger) this.stepCount++;
+        this.stepperTrigger=true;
+        this.timeSave=frameCount;
+    }
     frameTempo() {
+        if (this.stepperTrigger) {
+            if (frameCount-this.timeSave<this.stepperBound) return;
+            this.stepperTrigger=false;
+        }
         for (let b=0;b<this.currentTime.insts.length;b++) {
             let intels=this.currentTime.insts[b];
             let opc=intels.kind;
@@ -49,7 +63,13 @@ class Bando {
                         this.tropa[ids[i]].x+=dx;
                         this.tropa[ids[i]].y+=dy;
                     }
+                    let bef=intels.par[0];
                     intels.par[0]-=vel;
+                    if (this.stepperMode) {
+                        if (Math.floor(bef) != Math.floor(intels.par[0])) {
+                            triggerStep();
+                        }
+                    }
                     if (intels.par[0]<0) {
                         intels.ended=true;
                         //if (intels.par.length==3) {
@@ -120,7 +140,7 @@ class Bando {
             textSize(sizeText);
             fill('black')
             // consertar alinhamento...
-            text(i.toString(),rx-sizeText/2.5,ry+sizeText/1.3)
+            //text(i.toString(),rx-sizeText/2.5,ry+sizeText/1.3)
             fill(255)   
             let last=undefined;
             stroke(155,0,240,200);
@@ -143,6 +163,11 @@ class Bando {
             }
             strokeWeight(1);
             stroke(0)
+        }
+        if (this.stepperMode) {
+            textSize(0.08*HEIGHT);
+            fill('white')
+            text(this.stepCount,0.04*WIDTH,0.14*HEIGHT)
         }
         //document.getElementById("segurando").innerHTML=content_seg.substring(0,content_seg.length-2)
         //document.getElementById("qtdv").innerHTML="total: " + this.showing;
@@ -243,6 +268,7 @@ function startALL() {
     let text=saveHeader+saveRot
     cron=compileText(text)
     console.log(cron)
+    stepCount=0;
     startSim();
     
 }
@@ -251,6 +277,9 @@ let svmy;
 let selectMode=false;
 let pd=false;
 let IsRunning=false;
+let stepperMode=true;
+let stepCount=0;
+
 
 let bando=new Bando();
 let current_step=1;
@@ -266,7 +295,7 @@ let cx=0,cy=0;
 let lx=0,ly=0;
 function draw() {
     background(0);
-    drawGrid(lx,ly);
+    //drawGrid(lx,ly);
     drawMousePos(lx,ly)
     bando.drawTropa(lx,ly);
     if (IsRunning) {
