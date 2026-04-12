@@ -47,7 +47,9 @@ class Bando {
             switch(opc) {
                 case ik.frente:
                     if (intels.par[0]<0) continue  
+                    let wasf=false;
                     if (intels.first) {
+                        wasf=true;
                         intels.first=false;
                         intels.sv=[];
                         for (let i=0;i<ids.length;i++) {
@@ -65,7 +67,7 @@ class Bando {
                     }
                     let bef=intels.par[0];
                     intels.par[0]-=vel;
-                    if (this.stepperMode) {
+                    if (this.stepperMode && !wasf) {
                         if (Math.floor(bef) != Math.floor(intels.par[0])) {
                             this.triggerStep();
                         }
