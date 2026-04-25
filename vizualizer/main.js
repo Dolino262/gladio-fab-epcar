@@ -109,14 +109,12 @@ class Bando {
                     }
                     break;
                 case ik.nothing:
-                    if (intels.par[0]==0) continue;
-                    if (intels.par[0]>0) {
-                        intels.par[0]=(-30*intels.par[0])-frameCount;
-                    } 
-                    if (intels.par[0]+frameCount>=0) {
-                        intels.par[0]=0;
+                    if (intels.par[0]==0) {
                         this.currentTime.ended++;
+                           continue;
                     }
+                    this.triggerStep();
+                    intels.par[0]--;
                     break;
                 case ik.clr: 
                     for (let i=0;i<ids.length;i++ ) {
@@ -178,8 +176,8 @@ class Bando {
             strokeWeight(1);
             stroke(0)
             if (this.stepperMode) {
-                fill(130,130,130);
-                let dt=0.2*BOX_HEIGHT,rd=0.1*BOX_HEIGHT;
+                fill(0,0,0,80);
+                let dt=0.2*BOX_HEIGHT,rd=0.15*BOX_HEIGHT;
                 let cmx=dt*Math.cos(angle),cmy=dt*Math.sin(angle);
     
                 if (this.stepCount%2) {
