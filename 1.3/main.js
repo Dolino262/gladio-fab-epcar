@@ -1,5 +1,5 @@
-let HEIGHT=0.99*window.innerHeight;
-let WIDTH=window.innerWidth;
+let HEIGHT=500;
+let WIDTH=800;
 let BOX_HEIGHT=50;
 let BOX_WIDTH=50;
 
@@ -17,7 +17,6 @@ class Militar {
         this.angle=270;
         this.exist=true;
         this.selected=false;
-        this.color = [80,255,80,200];
     }
 }
 class Bando {
@@ -25,6 +24,7 @@ class Bando {
         this.tropa = []
         this.currentTime;
         this.showing=0;
+
         this.stepperMode=true;
         this.stepCount=0;
         this.stepperBound=15;
@@ -47,7 +47,7 @@ class Bando {
             let ids=intels.who;
             switch(opc) {
                 case ik.frente:
-                    if (intels.par[0]<0) continue  
+                    if (intels.par[0]<0) continue 
                     let wasf=false;
                     if (intels.first) {
                         wasf=true;
@@ -66,7 +66,7 @@ class Bando {
                         this.tropa[ids[i]].x+=dx;
                         this.tropa[ids[i]].y+=dy;
                     }
-                    let bef=intels.par[0];
+                    let bef=intels.par[0]
                     intels.par[0]-=vel;
                     if (this.stepperMode && !wasf) {
                         if (Math.floor(bef) != Math.floor(intels.par[0])) {
@@ -118,13 +118,6 @@ class Bando {
                         this.currentTime.ended++;
                     }
                     break;
-                case ik.clr: 
-                    for (let i=0;i<ids.length;i++ ) {
-                        this.tropa[ids[i]].color=intels.par;
-                        if (intels.par.length==3) this.tropa[ids[i]].color[3]=200;
-                    }
-                    this.currentTime.ended++;
-                    break;
             }
         }
     }
@@ -138,27 +131,23 @@ class Bando {
             }
             let rx=(look.x-cx)*BOX_WIDTH + WIDTH/2
             let ry=(cy-look.y)*BOX_HEIGHT + HEIGHT/2;
-            if (look.color==undefined) {
-                fill(255,255,255);
-            } else {
             if (look.selected && selectMode) {
-                fill(look.color[0],look.color[1],look.color[2],0.5*look.color[3])
+                fill(0, 100, 32);
             } else {
                 if (!selectMode) look.selected=false
-                fill(look.color[0],look.color[1],look.color[2],look.color[3])
-            } }
+                fill(80,255,80,200)
+            }
             circle(rx,ry,BOX_WIDTH/1.5);
             stroke(0);
             let sizeText=BOX_WIDTH*0.2;
             textSize(sizeText);
             fill('black')
             // consertar alinhamento...
-            //text(i.toString(),rx-sizeText/2.5,ry+sizeText/1.3)
+            text(i.toString(),rx-sizeText/2.5,ry+sizeText/1.3)
             fill(255)   
             let last=undefined;
             stroke(155,0,240,200);
             strokeWeight(3);
-            let angle=(this.tropa[i].angle+90)*Math.PI/180
             for (let b=0;b<this.tropa[i].structPoints.length;b++) {
                 let pt=this.tropa[i].structPoints[b];
                 let angle=this.tropa[i].angle*Math.PI/180
@@ -177,27 +166,17 @@ class Bando {
             }
             strokeWeight(1);
             stroke(0)
-            if (this.stepperMode) {
-                fill(130,130,130);
-                let dt=0.2*BOX_HEIGHT,rd=0.1*BOX_HEIGHT;
-                let cmx=dt*Math.cos(angle),cmy=dt*Math.sin(angle);
-    
-                if (this.stepCount%2) {
-                    circle(rx-cmx,ry-cmy,rd);
-                } else {
-                    circle(rx+cmx,ry+cmy,rd);
-                }
-            }
         }
         if (this.stepperMode) {
             textSize(0.08*HEIGHT);
             fill('white')
-            text(this.stepCount,0.04*WIDTH,0.14*HEIGHT)
+            text(this.stepCount,0.04*WIDTH,0.11*HEIGHT)
         }
-        //document.getElementById("segurando").innerHTML=content_seg.substring(0,content_seg.length-2)
-        //document.getElementById("qtdv").innerHTML="total: " + this.showing;
+        document.getElementById("segurando").innerHTML=content_seg.substring(0,content_seg.length-2)
+        document.getElementById("qtdv").innerHTML="total: " + this.showing;
     }
     resetarPos() {
+        this.stepCount=0;
         for (let i=0;i<this.tropa.length;i++) {
             let look=this.tropa[i];
             look.x=look.inix;
@@ -218,9 +197,9 @@ function salvarSelecao() {
     head+="'";
     saveHeader+='\n'+head;
     if (look) {
-        //document.getElementById("roteiro").value+='\n'+head;
+        document.getElementById("roteiro").value+='\n'+head;
     }
-    //document.getElementById("menu_macro").hidden=true;
+    document.getElementById("menu_macro").hidden=true;
     selectMode=false;
 }
 function drawGrid(cx, cy) {
@@ -285,15 +264,15 @@ let saveRot=""
 let saveHeader=""
 let look=false;
 function rotRef() { 
-    //if (!look) saveRot=document.getElementById('roteiro').value
-    //else saveHeader=document.getElementById('roteiro').value
+    if (!look) saveRot=document.getElementById('roteiro').value
+    else saveHeader=document.getElementById('roteiro').value
 }
 function startALL() {
     rotRef()
     let text=saveHeader+saveRot
     cron=compileText(text)
     console.log(cron)
-    stepCount=0;
+    bando.stepCount=0;
     startSim();
     
 }
@@ -302,9 +281,6 @@ let svmy;
 let selectMode=false;
 let pd=false;
 let IsRunning=false;
-let stepperMode=true;
-let stepCount=0;
-
 
 let bando=new Bando();
 let current_step=1;
@@ -320,7 +296,7 @@ let cx=0,cy=0;
 let lx=0,ly=0;
 function draw() {
     background(0);
-    //drawGrid(lx,ly);
+    drawGrid(lx,ly);
     drawMousePos(lx,ly)
     bando.drawTropa(lx,ly);
     if (IsRunning) {

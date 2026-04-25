@@ -3,7 +3,8 @@ const ik = {
     frente: 0,
     translate: 1,
     bound_it: 2,
-    nothing: 3
+    nothing: 3,
+    clr: 4
 }
 
 class Inst {
@@ -56,6 +57,9 @@ function whichOpIs(text) {
             break;
         case 'marcar_passo':
             return ik.nothing 
+            break;
+        case 'clr':
+            return ik.clr;
             break;
     }
 }

@@ -17,6 +17,7 @@ class Militar {
         this.angle=270;
         this.exist=true;
         this.selected=false;
+        this.color = [80,255,80,200];
     }
 }
 class Bando {
@@ -118,6 +119,13 @@ class Bando {
                         this.currentTime.ended++;
                     }
                     break;
+                case ik.clr: 
+                    for (let i=0;i<ids.length;i++ ) {
+                        this.tropa[ids[i]].color=intels.par;
+                        if (intels.par.length==3) this.tropa[ids[i]].color[3]=200;
+                    }
+                    this.currentTime.ended++;
+                    break;
             }
         }
     }
@@ -131,12 +139,15 @@ class Bando {
             }
             let rx=(look.x-cx)*BOX_WIDTH + WIDTH/2
             let ry=(cy-look.y)*BOX_HEIGHT + HEIGHT/2;
+            if (look.color==undefined) {
+                fill(255,255,255);
+            } else {
             if (look.selected && selectMode) {
-                fill(0, 100, 32);
+                fill(look.color[0],look.color[1],look.color[2],0.5*look.color[3])
             } else {
                 if (!selectMode) look.selected=false
-                fill(80,255,80,200)
-            }
+                fill(look.color[0],look.color[1],look.color[2],look.color[3])
+            } }
             circle(rx,ry,BOX_WIDTH/1.5);
             stroke(0);
             let sizeText=BOX_WIDTH*0.2;
@@ -148,10 +159,11 @@ class Bando {
             let last=undefined;
             stroke(155,0,240,200);
             strokeWeight(3);
+            let angle=(this.tropa[i].angle+90)*Math.PI/180
             for (let b=0;b<this.tropa[i].structPoints.length;b++) {
                 let pt=this.tropa[i].structPoints[b];
-                let angle=this.tropa[i].angle*Math.PI/180
                 let curAngle=Math.atan(pt[1]/pt[0])
+                let angle=this.tropa[i].angle*Math.PI/180
                 angle+=curAngle-90*Math.PI/180;
                 // consertar angulo pra y neg
                 let hyp=Math.hypot(pt[0]*BOX_WIDTH,pt[1]*BOX_HEIGHT)
@@ -166,6 +178,17 @@ class Bando {
             }
             strokeWeight(1);
             stroke(0)
+            if (this.stepperMode) {
+                fill(130,130,130);
+                let dt=0.2*BOX_HEIGHT,rd=0.1*BOX_HEIGHT;
+                let cmx=dt*Math.cos(angle),cmy=dt*Math.sin(angle);
+    
+                if (this.stepCount%2) {
+                    circle(rx-cmx,ry-cmy,rd);
+                } else {
+                    circle(rx+cmx,ry+cmy,rd);
+                }
+            }
         }
         if (this.stepperMode) {
             textSize(0.08*HEIGHT);
