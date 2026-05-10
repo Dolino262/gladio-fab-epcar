@@ -127,6 +127,7 @@ class Bando {
             }
         }
     }
+    
     drawTropa(cx, cy) {
         let content_seg="Segurando: "
         for (let i=0;i<this.tropa.length;i++) {
@@ -181,7 +182,7 @@ class Bando {
                 let dt=0.2*BOX_HEIGHT,rd=0.15*BOX_HEIGHT;
                 let cmx=dt*Math.cos(angle),cmy=dt*Math.sin(angle);
     
-                if (this.stepCount%2) {
+                if (!(this.stepCount%2)) {
                     circle(rx-cmx,ry-cmy,rd);
                 } else {
                     circle(rx+cmx,ry+cmy,rd);
@@ -240,7 +241,7 @@ function drawGrid(cx, cy) {
         line(mid-BOX_WIDTH*(i+1)/2+dx,0,mid-BOX_WIDTH*(i+1)/2+dx,HEIGHT)
     }
     stroke(0); 
-    
+
     mid=HEIGHT/2;
     stroke(128,128,128,100);
     for (let i=0;i<boxyq/2+1;i++) {

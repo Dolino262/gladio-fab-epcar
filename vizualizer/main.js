@@ -180,7 +180,7 @@ class Bando {
                 let dt=0.2*BOX_HEIGHT,rd=0.15*BOX_HEIGHT;
                 let cmx=dt*Math.cos(angle),cmy=dt*Math.sin(angle);
     
-                if (this.stepCount%2) {
+                if (!(this.stepCount%2)) {
                     circle(rx-cmx,ry-cmy,rd);
                 } else {
                     circle(rx+cmx,ry+cmy,rd);
