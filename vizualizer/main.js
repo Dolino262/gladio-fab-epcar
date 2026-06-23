@@ -290,7 +290,6 @@ function startALL() {
     rotRef()
     let text=saveHeader+saveRot
     cron=compileText(text)
-    console.log(cron)
     stepCount=0;
     startSim();
     
