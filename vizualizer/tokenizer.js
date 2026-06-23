@@ -97,7 +97,6 @@ function preCompiling(text) {
         } 
         return false;
     }
-    console.log(dtd)
     for (let i=0;i<text.length;i++) {
         if (text[i]=='[' || text[i] == ']') ison=!ison;
         if (ison) { 
@@ -119,7 +118,6 @@ function compileText(text) {
     let going_time= new Time()
     let going_inst;
     let rdb=preCompiling(text)
-    console.log(rdb)
     let name=[0,0]
     let par=[0,0];
     let cha=[0,0];
@@ -137,11 +135,9 @@ function compileText(text) {
         if (rdb[i]==';') {
             let nome=rdb.substring(name[0],name[1]);
             let pare;
-            console.log(rdb.substring(par[0],par[1]), rdb.substring(cha[0],cha[1]))
             eval("pare=["+rdb.substring(par[0],par[1])+"]");
             let chav;
             eval("chav=["+rdb.substring(cha[0],cha[1])+']')
-            console.log(pare,chav)
             let op=whichOpIs(nome);
             going_time.appendInst(new Inst(op,pare,chav))
             name[0]=i+1;
