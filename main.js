@@ -381,6 +381,7 @@ function mouseReleased(){
 }
 
 function mouseWheel(event) {
+    if (mouseX > WIDTH || mouseX < 0 || mouseY > HEIGHT || mouseY < 0) return;
     if (event.delta < 0) {
         BOX_HEIGHT=BOX_HEIGHT*1.1;
         BOX_WIDTH=BOX_WIDTH*1.1;

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="p5.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+    <script src="tokenizer.js"></script>
+    <script src="main.js"></script>
+    <script>
+      
+      let tropa=sessionStorage.getItem("tropa");
+      let showing=sessionStorage.getItem("showing");
+      bando.tropa=JSON.parse(tropa);
+      bando.showing=JSON.parse(showing);
+      let header=sessionStorage.getItem("header");
+      let rot=sessionStorage.getItem("rot");
+      saveHeader=JSON.parse(header);
+      saveRot=JSON.parse(rot);
+      bando.resetarPos();
+
+    </script>
+  </head>
+  <body>
+    <div class="lado-esquerdo">
+    <main>
+
+    </main>
+    <button onclick="startALL()">SIMULAR</button>
+    <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
+    <button onclick="bando.resetarPos();IsRunning=false;">RESETAR</button>
+    <button onclick="
+      tropa = bando.tropa;
+      showing = bando.showing;
+  
+      header = saveHeader;
+      rot = saveRot;
+
+      sessionStorage.setItem('tropa', JSON.stringify(tropa));
+      sessionStorage.setItem('showing', JSON.stringify(showing));
+      sessionStorage.setItem('header', JSON.stringify(saveHeader));
+      sessionStorage.setItem('rot', JSON.stringify(saveRot));
+    
+      window.location.href='../index.html';
+    ">GOBACK</button>
+    </div>
+  </body>
+</html>

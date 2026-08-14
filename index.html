@@ -6,6 +6,23 @@
     <meta charset="utf-8" />
     <script src="tokenizer.js"></script>
     <script src="main.js"></script>
+    <script>
+
+      try {
+        let tropa=sessionStorage.getItem("tropa");
+        let showing=sessionStorage.getItem("showing");
+        bando.tropa=JSON.parse(tropa);
+        bando.showing=JSON.parse(showing);
+        let header=sessionStorage.getItem("header");
+        let rot=sessionStorage.getItem("rot");
+        saveHeader=JSON.parse(header);
+        saveRot=JSON.parse(rot);
+        bando.resetarPos();
+      } catch (e) {
+        console.log("não é necessáriamente um erro, mas essa página carregou sem um pré loading de tropa")
+      }
+
+    </script>
   </head>
   <body>
     <div class="lado-esquerdo">
@@ -18,6 +35,21 @@
       <button onclick="startALL()">SIMULAR</button>
       <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
       <button onclick="bando.resetarPos();IsRunning=false;">RESETAR</button>
+      <button onclick="
+        const tropa = bando.tropa;
+        const showing = bando.showing;
+  
+        const header = saveHeader;
+        const rot = saveRot;
+
+        sessionStorage.setItem('tropa', JSON.stringify(tropa));
+        sessionStorage.setItem('showing', JSON.stringify(showing));
+        sessionStorage.setItem('header', JSON.stringify(saveHeader));
+        sessionStorage.setItem('rot', JSON.stringify(saveRot));
+
+
+        window.location.href='vizualizer/full.html';
+      ">FULLSCR</button>
     </main>
     <div id="menu_macro">
       SELECIONE OS MILITARES: 
@@ -102,6 +134,8 @@
           ">ADICIONAR SELEÇÃO</button>
       </div>
     </div>
-
+    <script>
+      document.getElementById('roteiro').value=saveRot
+    </script>
   </body>
 </html>

@@ -15,6 +15,7 @@
             let ans=JSON.parse(texto);
             bando.tropa=ans.trp;
             bando.showing=ans.qtd;
+            bando.resetarPos();
           }
       };
       xhr.send()
