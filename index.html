@@ -4,8 +4,35 @@
     <script src="p5.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
+    <script src="patterns.js"></script>
     <script src="tokenizer.js"></script>
     <script src="main.js"></script>
+    <script>
+
+      let erd=false;
+
+      let t_tropa,t_showing,t_header,t_rot;
+
+      try {
+        t_tropa=sessionStorage.getItem("tropa");
+        t_showing=sessionStorage.getItem("showing");
+        t_header=sessionStorage.getItem("header");
+        t_rot=sessionStorage.getItem("rot");
+        if (!(sessionStorage.getItem('tropa') !== null)) erd=true;
+      } catch (e) {
+        erd=true;
+        console.log("não é necessáriamente um erro, mas essa página carregou sem um pré loading de tropa")
+      }
+      if (!erd) {
+        console.log("deu load ")
+        bando.tropa=JSON.parse(t_tropa);
+        bando.showing=JSON.parse(t_showing);
+        saveHeader=JSON.parse(t_header);
+        saveRot=JSON.parse(t_rot);
+        bando.resetarPos();
+      }
+
+    </script>
   </head>
   <body>
     <div class="lado-esquerdo">
@@ -18,6 +45,21 @@
       <button onclick="startALL()">SIMULAR</button>
       <button onclick="IsRunning=!IsRunning">PAUSAR/DESPAUSAR</button>
       <button onclick="bando.resetarPos();IsRunning=false;">RESETAR</button>
+      <button onclick="
+        const tropa = bando.tropa;
+        const showing = bando.showing;
+  
+        const header = saveHeader;
+        const rot = saveRot;
+
+        sessionStorage.setItem('tropa', JSON.stringify(tropa));
+        sessionStorage.setItem('showing', JSON.stringify(showing));
+        sessionStorage.setItem('header', JSON.stringify(saveHeader));
+        sessionStorage.setItem('rot', JSON.stringify(saveRot));
+
+
+        window.location.href='vizualizer/full.html';
+      ">FULLSCR</button>
     </main>
     <div id="menu_macro">
       SELECIONE OS MILITARES: 
@@ -102,6 +144,8 @@
           ">ADICIONAR SELEÇÃO</button>
       </div>
     </div>
-
+    <script>
+      document.getElementById('roteiro').value=saveRot
+    </script>
   </body>
 </html>

@@ -17,6 +17,7 @@ class Militar {
         this.angle=270;
         this.exist=true;
         this.selected=false;
+        this.initAngle=270;
         this.color = [80,255,80,200];
     }
 }
@@ -31,8 +32,8 @@ class Bando {
         this.timeSave=0;
         this.stepperTrigger=false;
     }  
-    triggerStep() {
-        if (!this.stepperTrigger) this.stepCount++;
+    triggerStep(cnt = false) {
+        if (!this.stepperTrigger && !cnt) this.stepCount++;
         this.stepperTrigger=true;
         this.timeSave=frameCount;
     }
@@ -111,15 +112,22 @@ class Bando {
                 case ik.nothing:
                     if (intels.par[0]==0) {
                         this.currentTime.ended++;
-                           continue;
+                        continue;
                     }
-                    this.triggerStep();
+                    this.triggerStep(intels.par[1]==1);
                     intels.par[0]--;
                     break;
                 case ik.clr: 
                     for (let i=0;i<ids.length;i++ ) {
                         this.tropa[ids[i]].color=intels.par;
                         if (intels.par.length==3) this.tropa[ids[i]].color[3]=200;
+                    }
+                    this.currentTime.ended++;
+                    break;
+                case ik.i_angle:
+                    for (let i=0;i<ids.length;i++ ) {
+                        this.tropa[ids[i]].initAngle=intels.par[0];
+                        this.tropa[ids[i]].angle=intels.par[0];
                     }
                     this.currentTime.ended++;
                     break;
@@ -145,42 +153,55 @@ class Bando {
                 if (!selectMode) look.selected=false
                 fill(look.color[0],look.color[1],look.color[2],look.color[3])
             } }
-            circle(rx,ry,BOX_WIDTH/1.5);
+            circle(rx,ry,BOX_WIDTH/circle_tropa_scale);
             stroke(0);
-            let sizeText=BOX_WIDTH*0.2;
-            textSize(sizeText);
-            fill('black')
-            // consertar alinhamento...
-            //text(i.toString(),rx-sizeText/2.5,ry+sizeText/1.3)
-            fill(255)   
+              
             let last=undefined;
-            stroke(155,0,240,200);
-            strokeWeight(3);
+            stroke(bseta_tropa_color[0],bseta_tropa_color[1],bseta_tropa_color[2],bseta_tropa_color[3]);
+            strokeWeight(seta_tropa_stroke);
             let angle=(this.tropa[i].angle+90)*Math.PI/180
-            for (let b=0;b<this.tropa[i].structPoints.length;b++) {
-                let pt=this.tropa[i].structPoints[b];
-                let angle=this.tropa[i].angle*Math.PI/180
+
+            let t_pts=[]
+            for (let b=0;b<militar_struct_structPoints.length;b++) {
+                let pt=militar_struct_structPoints[b];
                 let curAngle=Math.atan(pt[1]/pt[0])
+                let angle=this.tropa[i].angle*Math.PI/180
                 angle+=curAngle-90*Math.PI/180;
                 // consertar angulo pra y neg
+                if (pt[1]<0 && pt[0]>0) {
+                    angle+=30*Math.PI/180;
+                }
+                if (pt[1]<0 && pt[0]<0) {
+                    angle-=30*Math.PI/180;
+                }
                 let hyp=Math.hypot(pt[0]*BOX_WIDTH,pt[1]*BOX_HEIGHT)
                 if (curAngle<0) hyp*=-1;
                 let nx=rx+hyp*Math.cos(angle);
                 let ny=ry+hyp*Math.sin(angle);
-              
+                t_pts.push([nx,ny]);
                 if (last!=undefined) {
                     line(nx,ny,last[0],last[1])
                 }
                 last=[nx,ny];
             }
+            strokeWeight(0)
+            fill(seta_tropa_color[0],seta_tropa_color[1],seta_tropa_color[2],seta_tropa_color[3],seta_tropa_color[4]);
+            triangle(t_pts[0][0],t_pts[0][1],t_pts[1][0],t_pts[1][1],t_pts[2][0],t_pts[2][1]) 
             strokeWeight(1);
             stroke(0)
+            
+            let sizeText=BOX_WIDTH*text_scale;
+            textSize(sizeText);
+            fill('black')
+            // consertar alinhamento...
+            //text(i.toString(),rx-sizeText/2.5,ry+sizeText/1.3)
+            fill(255) 
             if (this.stepperMode) {
-                fill(0,0,0,80);
-                let dt=0.2*BOX_HEIGHT,rd=0.15*BOX_HEIGHT;
+                fill(0,0,0,255);
+                let dt=0.31*BOX_HEIGHT,rd=0.15*BOX_HEIGHT;
                 let cmx=dt*Math.cos(angle),cmy=dt*Math.sin(angle);
     
-                if (!this.stepCount%2) {
+                if ((this.stepCount%2)) {
                     circle(rx-cmx,ry-cmy,rd);
                 } else {
                     circle(rx+cmx,ry+cmy,rd);
@@ -196,11 +217,16 @@ class Bando {
         //document.getElementById("qtdv").innerHTML="total: " + this.showing;
     }
     resetarPos() {
+        this.stepCount=0;
         for (let i=0;i<this.tropa.length;i++) {
             let look=this.tropa[i];
             look.x=look.inix;
             look.y=look.iniy;
-            look.angle=270;
+            if (look.initAngle!=undefined) {
+                look.angle=look.initAngle
+            } else {
+                look.angle=270;
+            }
         }
     }
 }
@@ -276,6 +302,7 @@ function drawMousePos(cx, cy) {
 function startSim() {
     IsRunning=true;
     current_step=1;
+    bando.resetarPos();
     bando.currentTime=structuredClone(cron.step[0]);
 }
 let cron;
@@ -290,7 +317,6 @@ function startALL() {
     rotRef()
     let text=saveHeader+saveRot
     cron=compileText(text)
-    console.log(cron)
     stepCount=0;
     startSim();
     
@@ -306,16 +332,18 @@ let stepCount=0;
 
 let bando=new Bando();
 let current_step=1;
-
+let cx=0,cy=0;
+let lx=0,ly=0;
 function setup() {
     document.addEventListener('contextmenu', event => event.preventDefault());
     createCanvas(WIDTH, HEIGHT);
-
+    lx=good_lx
+    ly=good_ly
+    BOX_HEIGHT=good_bhd
+    BOX_WIDTH=good_bhd
 }
   
  
-let cx=0,cy=0;
-let lx=0,ly=0;
 function draw() {
     background(0);
     //drawGrid(lx,ly);
@@ -381,6 +409,7 @@ function mouseReleased(){
 }
 
 function mouseWheel(event) {
+    if (mouseX > WIDTH || mouseX < 0 || mouseY > HEIGHT || mouseY < 0) return;
     if (event.delta < 0) {
         BOX_HEIGHT=BOX_HEIGHT*1.1;
         BOX_WIDTH=BOX_WIDTH*1.1;

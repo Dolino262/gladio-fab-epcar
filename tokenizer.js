@@ -4,7 +4,8 @@ const ik = {
     translate: 1,
     bound_it: 2,
     nothing: 3,
-    clr: 4
+    clr: 4,
+    i_angle: 5
 }
 
 class Inst {
@@ -60,6 +61,9 @@ function whichOpIs(text) {
             break;
         case 'clr':
             return ik.clr;
+            break;
+        case 'init_angle':
+            return ik.i_angle
             break;
     }
 }
