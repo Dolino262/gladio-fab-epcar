@@ -180,7 +180,7 @@ class Bando {
                 let dt=0.2*BOX_HEIGHT,rd=0.15*BOX_HEIGHT;
                 let cmx=dt*Math.cos(angle),cmy=dt*Math.sin(angle);
     
-                if (!(this.stepCount%2)) {
+                if (!this.stepCount%2) {
                     circle(rx-cmx,ry-cmy,rd);
                 } else {
                     circle(rx+cmx,ry+cmy,rd);
@@ -196,7 +196,6 @@ class Bando {
         //document.getElementById("qtdv").innerHTML="total: " + this.showing;
     }
     resetarPos() {
-        this.stepCount=0;
         for (let i=0;i<this.tropa.length;i++) {
             let look=this.tropa[i];
             look.x=look.inix;
@@ -291,6 +290,7 @@ function startALL() {
     rotRef()
     let text=saveHeader+saveRot
     cron=compileText(text)
+    console.log(cron)
     stepCount=0;
     startSim();
     
@@ -381,7 +381,6 @@ function mouseReleased(){
 }
 
 function mouseWheel(event) {
-    if (mouseX > WIDTH || mouseX < 0 || mouseY > HEIGHT || mouseY < 0) return;
     if (event.delta < 0) {
         BOX_HEIGHT=BOX_HEIGHT*1.1;
         BOX_WIDTH=BOX_WIDTH*1.1;
